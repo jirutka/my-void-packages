@@ -1,0 +1,26 @@
+From 4e49e2d167d87bcb0359015b3d540acf3548d98a Mon Sep 17 00:00:00 2001
+From: Jakub Jirutka <jakub@jirutka.cz>
+Date: Sat, 10 Jul 2021 19:05:26 +0200
+Subject: [PATCH] mkinitcpio: Fix --cmdline and --osrelease, add them to
+ _opt_long
+
+Fixes https://github.com/archlinux/mkinitcpio/pull/53#discussion_r667359644.
+---
+ mkinitcpio | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Patch-Source: https://github.com/archlinux/mkinitcpio/pull/59
+
+diff --git a/mkinitcpio b/mkinitcpio
+index 692c755..ebac306 100755
+--- a/mkinitcpio
++++ b/mkinitcpio
+@@ -457,7 +457,7 @@ _opt_short='A:c:D:g:H:hk:nLMPp:r:S:sd:t:U:Vvz:'
+ _opt_long=('add:' 'addhooks:' 'config:' 'generate:' 'hookdir': 'hookhelp:' 'help'
+           'kernel:' 'listhooks' 'automods' 'moduleroot:' 'nocolor' 'allpresets'
+           'preset:' 'skiphooks:' 'save' 'generatedir:' 'builddir:' 'version' 'verbose' 'compress:'
+-          'uefi:' 'microcode:' 'splash:' 'kernelimage:' 'uefistub:')
++          'cmdline:' 'uefi:' 'microcode:' 'splash:' 'kernelimage:' 'uefistub:' 'osrelease:')
+ 
+ parseopts "$_opt_short" "${_opt_long[@]}" -- "$@" || exit 1
+ set -- "${OPTRET[@]}"

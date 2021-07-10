@@ -1,7 +1,9 @@
 # Template file for 'mkinitcpio'
 pkgname=mkinitcpio
-version=30
+_gitrev=f40bb42577284083adaf1edca2f05300badb78b2
+version=30+20210707
 revision=1
+wrksrc="${pkgname}-$_gitrev"
 build_style=gnu-makefile
 hostmakedepends="asciidoc"
 depends="busybox-static bsdtar bash"
@@ -10,8 +12,8 @@ short_desc="Next generation of initramfs creation"
 maintainer="Andrea Brancaleoni <abc@pompel.me>"
 license="GPL-2.0-only"
 homepage="https://git.archlinux.org/mkinitcpio.git"
-distfiles="https://sources.archlinux.org/other/${pkgname}/${pkgname}-${version}.tar.gz"
-checksum=c7725035a06d2ab6ef6e97601b69859d6061aec95c4551e2a1ad2e27d307258f
+distfiles="https://github.com/archlinux/mkinitcpio/archive/${_gitrev}/${pkgname}-${_gitrev}.tar.gz"
+checksum=bc0c8ccc7e8339688c103278fae59dd1674ad2413fb2aa7a348f60f034d369a6
 conf_files="/etc/mkinitcpio.conf"
 replaces="mkinitcpio-udev>=0"
 
@@ -23,6 +25,9 @@ post_install() {
 	# Install udev hooks
 	vinstall ${FILESDIR}/udev_hook 644 usr/lib/initcpio/hooks udev
 	vinstall ${FILESDIR}/udev_install 644 usr/lib/initcpio/install udev
+
+	# Install udev rule used by both lvm2 and encrypt hook
+	vinstall ${FILESDIR}/11-dm-initramfs.rules 644 usr/lib/initcpio/udev
 
 	# Remove unneeded systemd bits
 	rm -rf ${DESTDIR}/usr/lib/kernel
@@ -45,15 +50,12 @@ mkinitcpio-lvm2_package() {
 	pkg_install() {
 		vinstall ${FILESDIR}/lvm2_hook 644 usr/lib/initcpio/hooks lvm2
 		vinstall ${FILESDIR}/lvm2_install 644 usr/lib/initcpio/install lvm2
-		for RULES in ${FILESDIR}/*.rules; do
-			vinstall $RULES 644 usr/lib/initcpio/udev $(basename $RULES)
-		done
+		vinstall ${FILESDIR}/69-dm-lvm-metad.rules 644 usr/lib/initcpio/udev
 	}
 }
 
 mkinitcpio-encrypt_package() {
-	depends="${sourcepkg}>=${version}_${revision}
-		${sourcepkg}-lvm2>=${version}_${revision} cryptsetup"
+	depends="${sourcepkg}>=${version}_${revision} cryptsetup"
 	short_desc+=" - encrypt support"
 	pkg_install() {
 		vinstall ${FILESDIR}/encrypt_hook 644 usr/lib/initcpio/hooks encrypt
