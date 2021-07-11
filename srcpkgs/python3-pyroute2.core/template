@@ -1,0 +1,15 @@
+# Template file for 'python3-pyroute2.core'
+pkgname=python3-pyroute2.core
+version=0.6.4
+revision=1
+wrksrc="${pkgname#python3-}-${version}"
+build_style=python3-module
+hostmakedepends="python3-setuptools"
+depends="python3"
+short_desc="Python Netlink library: the core"
+maintainer="Jakub Jirutka <jakub@jirutka.cz>"
+license="GPL-2.0, Apache-2.0"
+homepage="https://pyroute2.org"
+changelog="https://github.com/svinota/pyroute2/blob/master/CHANGELOG.md"
+distfiles="${PYPI_SITE}/p/pyroute2.core/pyroute2.core-${version}.tar.gz"
+checksum=453dee5241e32994fb0ccad4c1a54fc98353fec35690653ccf95617b54e3a5cd
