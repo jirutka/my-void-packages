@@ -1,1 +1,3 @@
 = My XBPS source packages collection
+
+This repository contains my package templates that are not available in the official Void Linux repository yet.
