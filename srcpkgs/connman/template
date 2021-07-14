@@ -1,7 +1,7 @@
 # Template file for 'connman'
 pkgname=connman
 version=1.40
-revision=2
+revision=3
 build_style=gnu-configure
 configure_args="--enable-polkit --enable-client --enable-pie --enable-ethernet
  --enable-wifi --enable-bluetooth --enable-loopback --enable-nmcompat
@@ -41,6 +41,14 @@ post_install() {
 	vbin client/connmanctl
 	vsv connmand
 	vinstall ${FILESDIR}/connmand.conf 755 usr/share/dbus-1/system.d/
+}
+
+connman-openconnect_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc+=" - support for OpenConnect VPN"
+	pkg_install() {
+		vmove usr/lib/connman/plugins-vpn/openconnect.so
+	}
 }
 
 connman-devel_package() {
