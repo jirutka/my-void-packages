@@ -1,7 +1,7 @@
 # Template file for 'connman'
 pkgname=connman
 version=1.40
-revision=3
+revision=4
 build_style=gnu-configure
 configure_args="--enable-polkit --enable-client --enable-pie --enable-ethernet
  --enable-wifi --enable-bluetooth --enable-loopback --enable-nmcompat
@@ -45,9 +45,26 @@ post_install() {
 
 connman-openconnect_package() {
 	depends="${sourcepkg}>=${version}_${revision}"
-	short_desc+=" - support for OpenConnect VPN"
+	short_desc="OpenConnect VPN plugin for ConnMan"
 	pkg_install() {
 		vmove usr/lib/connman/plugins-vpn/openconnect.so
+	}
+}
+
+connman-openvpn_package() {
+	depends="${sourcepkg}>=${version}_${revision} openvpn"
+	short_desc="OpenVPN plugin for ConnMan"
+	pkg_install() {
+		vmove usr/lib/connman/plugins-vpn/openvpn.so
+		vmove usr/lib/connman/scripts/openvpn-script
+	}
+}
+
+connman-wireguard_package() {
+	depends="${sourcepkg}>=${version}_${revision}"
+	short_desc="WireGuard VPN plugin for ConnMan"
+	pkg_install() {
+		vmove usr/lib/connman/plugins-vpn/wireguard.so
 	}
 }
 
